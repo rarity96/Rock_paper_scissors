@@ -1,53 +1,52 @@
 import random
 
-choices = ['r', 'p', 's']
-
-
-def game():
-    player_points = 0
-    computer_points = 0
-    print("Welcome! Let's play")
-    player_name = input("But first, tell me your name:  ")
-    print(f"And now {player_name}, choose your weapon!")
+def get_player_move():
     while True:
-        player_choice = input('[r]ock, [p]aper, [s]cissors: ').lower()
-        if player_choice.lower() not in choices:
-            print("Again, You need to pick rock, paper or scissors")
-        computer_choice = random.choice(choices)
-        print(f"Computer picked: {computer_choice}")
-        if player_choice == computer_choice:
-            print("It's a draw! No points")
-        elif player_choice == 'r':
-            if computer_choice == 'p':
-                print("Sorry but this time I won")
-                computer_points += 1
-            else:
-                print("Point for you")
-                player_points += 1
-        elif player_choice == 'p':
-            if computer_choice == 's':
-                print("Sorry but this time I won")
-                computer_points += 1
-            else:
-                print("Point for you")
-                player_points += 1
-        elif player_choice == 's':
-            if computer_choice == 'r':
-                print("Sorry but this time I won")
-                computer_points += 1
-            else:
-                print("Point for you")
-                player_points += 1
-        print("-------Another round-------")
-        if player_points == 3 or computer_points == 3:
-            print(f'{player_name}:{player_points}, Computer{computer_points}')
-            play_again = input("Do you wanna play again? [y]/[n]: ")
-            if play_again.lower() == 'y':
-                player_points = 0
-                computer_points = 0
-                continue
-            else:
-                break
+        player_move = input("Choose your weapon, rock, paper, scissors: ")
+        if player_move in ['paper', 'rock', 'scissors']:
+            return player_move
+        print("Wrong choice, try again.")
 
+def get_computer_move():
+    # Wylosuj ruch komputera
+    computer_move = random.choice(['paper', 'rock', 'scissors'])
+    return computer_move
 
-game()
+def get_round_result(player_move, computer_move):
+    # Sprawdź wynik rundy
+    if player_move == computer_move:
+        return "Tie"
+    elif player_move == 'paper' and computer_move == 'rock':
+        return "you won!"
+    elif player_move == 'rock' and computer_move == 'scissors':
+        return "you won!"
+    elif player_move == 'scissors' and computer_move == 'paper':
+        return "you won!"
+    else:
+        return "you lose!"
+
+def update_score(score, result):
+    # Zaktualizuj punktację
+    if result == "you won!":
+        score[0] += 1
+    elif result == "you lose!":
+        score[1] += 1
+
+def print_score(score):
+    # Wyświetl aktualny stan punktacji
+    print(f"You: {score[0]}   Computer: {score[1]}")
+
+def play_rock_paper_scissors():
+    # Zacznij grę
+    score = [0, 0]
+    while True:
+        player_move = get_player_move()
+        computer_move = get_computer_move()
+        result = get_round_result(player_move, computer_move)
+        update_score(score, result)
+        print(result)
+        print_score(score)
+        if input("Press Enter to continue, or write 'q', to end the game: ") == 'q':
+            break
+
+play_rock_paper_scissors()
